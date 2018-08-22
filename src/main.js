@@ -5,10 +5,12 @@ canvas.height = 600;
 const context = canvas.getContext('2d');
 
 const map = [
-    [0, 1, 1, 1],
+    [1, 1, 1, 1],
+    [1, 0, 1, 1],
     [1, 1, 1, 0],
-    [1, 1, 1, 0],
-    [1, 1, 1, 0]
+    [1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 1, 1, 1],
+    [1, 1, 1, 0, 1, 1]
 ];
 
 const tiles = [];
@@ -16,21 +18,27 @@ const tiles = [];
 function Tile(x, y, type) {
     this.x = x;
     this.y = y;
-    this.width = 50;
-    this.height = 50;
+    this.width = 100;
+    this.height = 100;
     this.type = type;
 }
 
 function buildMap() {
-    const size = 51;
+    let x = 0;
+    let y = 0;
+    let xsize = 71;
+    const ysize = 41;
     for (let i = 0; i < map.length; i++) {
-        const x = i * size;
+
         for (let j = 0; j < map[i].length; j++) {
-            const y = j * size;
+            x += xsize;
+
             const tile = new Tile(x, y, map[i][j]);
 
             tiles.push(tile);
         }
+        x = 0;
+        y += ysize;
     }
 
 }
@@ -46,14 +54,50 @@ function drawBackground() {
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (const tile of tiles) {
-        context.moveTo(tile.x + (tile.width / 2), tile.y);
-        context.lineTo(tile.x, tile.y + (tile.height) / 2);
-        context.lineTo(tile.x + (tile.width / 2), tile.y + tile.height);
-        context.lineTo(tile.x + tile.width, tile.y + (tile.height) / 2);
+    const xMin = 30;
+    const xMid = 70;
+    const xMax = 100;
+    const yMin = 20;
+    const yMid = 40;
+    const yMax = 60;
 
-        context.fillStyle = tile.type === 1 ? '#000' : '#ff0000';
+
+    for (const tile of tiles) {
+        if (tile.type === 0) {
+            continue;
+        }
+        context.beginPath();
+        context.fillStyle = '#2fa00c';
+        context.strokeStyle = '#247d09';
+        context.moveTo(tile.x + xMin, tile.y);
+        context.lineTo(tile.x, tile.y + yMid);
+        context.lineTo(tile.x + xMid, tile.y + yMid);
+        context.lineTo(tile.x + xMax, tile.y);
+        context.stroke();
         context.fill();
+        context.closePath();
+
+        context.beginPath();
+        context.fillStyle = '#be7610';
+        context.strokeStyle = '#a16510';
+        context.moveTo(tile.x + xMax, tile.y);
+        context.lineTo(tile.x + xMax, tile.y + yMin)
+        context.lineTo(tile.x + xMid, tile.y + yMax);
+        context.lineTo(tile.x + xMid, tile.y + yMid);
+        context.stroke();
+        context.fill();
+        context.closePath();
+
+        context.beginPath();
+        context.fillStyle = '#8d6908';
+        context.strokeStyle = '#755604';
+        context.moveTo(tile.x + xMid, tile.y + yMid);
+        context.lineTo(tile.x + xMid, tile.y + yMax);
+        context.lineTo(tile.x, tile.y + yMax);
+        context.lineTo(tile.x, tile.y + yMid);
+        context.stroke();
+        context.fill();
+        context.closePath();
     }
 }
 
