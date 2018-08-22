@@ -66,9 +66,10 @@ function drawBackground() {
         if (tile.type === 0) {
             continue;
         }
+        
         context.beginPath();
-        context.fillStyle = '#2fa00c';
-        context.strokeStyle = '#247d09';
+        context.fillStyle = '#fff';
+        context.strokeStyle = '#8e8e8e';
         context.moveTo(tile.x + xMin, tile.y);
         context.lineTo(tile.x, tile.y + yMid);
         context.lineTo(tile.x + xMid, tile.y + yMid);
@@ -76,10 +77,10 @@ function drawBackground() {
         context.stroke();
         context.fill();
         context.closePath();
-
+        
         context.beginPath();
-        context.fillStyle = '#be7610';
-        context.strokeStyle = '#a16510';
+        context.fillStyle = '#807f7e';
+        context.strokeStyle = '#666';
         context.moveTo(tile.x + xMax, tile.y);
         context.lineTo(tile.x + xMax, tile.y + yMin)
         context.lineTo(tile.x + xMid, tile.y + yMax);
@@ -89,8 +90,8 @@ function drawBackground() {
         context.closePath();
 
         context.beginPath();
-        context.fillStyle = '#8d6908';
-        context.strokeStyle = '#755604';
+        context.fillStyle = '#959492';
+        context.strokeStyle = '#6c6b6a';
         context.moveTo(tile.x + xMid, tile.y + yMid);
         context.lineTo(tile.x + xMid, tile.y + yMax);
         context.lineTo(tile.x, tile.y + yMax);
