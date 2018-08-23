@@ -1,113 +1,113 @@
+class Tile {
+    constructor(x, y, type) {
+        this.x = x;
+        this.y = y;
+        this.width = 100;
+        this.height = 100;
+        this.type = type;
+    }
+}
+
+class MapManager {
+
+    constructor(width, height) {
+        this.width = width;
+        this.height = height;
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        this.context = canvas.getContext('2d');
+        this.tiles = [];
+
+        this.map = [
+            [1, 1, 1, 1],
+            [1, 0, 1, 1],
+            [1, 1, 1, 0],
+            [1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 1],
+            [1, 1, 1, 0, 1, 1]
+        ];
+    }
+
+    createFace(coords, fill, stroke) {
+        this.context.beginPath();
+        this.context.fillStyle = fill;
+        this.context.strokeStyle = stroke;
+        this.context.moveTo(coords[0], coords[1]);
+        this.context.lineTo(coords[2], coords[3]);
+        this.context.lineTo(coords[4], coords[5]);
+        this.context.lineTo(coords[6], coords[7]);
+        this.context.stroke();
+        this.context.fill();
+        this.context.closePath();
+    }
+
+    drawTiles() {
+        this.context.clearRect(0, 0, canvas.width, canvas.height);
+
+        const xMin = 30;
+        const xMid = 70;
+        const xMax = 100;
+        const yMin = 20;
+        const yMid = 40;
+        const yMax = 60;
+
+        for (const tile of this.tiles) {
+            if (tile.type === 0) {
+                continue;
+            }
+
+            this.createFace([tile.x + xMin, tile.y, tile.x, tile.y + yMid, tile.x + xMid, tile.y + yMid, tile.x + xMax, tile.y], '#fff', '#8e8e8e');
+            this.createFace([tile.x + xMax, tile.y, tile.x + xMax, tile.y + yMin, tile.x + xMid, tile.y + yMax, tile.x + xMid, tile.y + yMid], '#807f7e', '#666');
+            this.createFace([tile.x + xMid, tile.y + yMid, tile.x + xMid, tile.y + yMax, tile.x, tile.y + yMax, tile.x, tile.y + yMid], '#959492', '#c6b6a6');
+        }
+    }
+
+    buildMap() {
+        let x = 0;
+        let y = 0;
+        let xOffset = 41;
+        let xsize = 71;
+        const ysize = 41;
+
+        for (let i = 0; i < this.map.length; i++) {
+            x = xOffset * i;
+            for (let j = 0; j < this.map[i].length; j++) {
+                x += xsize;
+
+                const tile = new Tile(x, y, this.map[i][j]);
+
+                this.tiles.push(tile);
+            }
+
+            y += ysize;
+        }
+
+        this.drawTiles();
+    }
+
+    getTileCanvas() {
+        return this.canvas;
+    }
+}
+
 const canvas = document.getElementById('game');
 canvas.width = 900;
 canvas.height = 600;
 
 const context = canvas.getContext('2d');
-
-const map = [
-    [1, 1, 1, 1],
-    [1, 0, 1, 1],
-    [1, 1, 1, 0],
-    [1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 1, 1, 1],
-    [1, 1, 1, 0, 1, 1]
-];
-
-const tiles = [];
-
-function Tile(x, y, type) {
-    this.x = x;
-    this.y = y;
-    this.width = 100;
-    this.height = 100;
-    this.type = type;
-}
-
-function buildMap() {
-    let x = 0;
-    let y = 0;
-    let xsize = 71;
-    const ysize = 41;
-    for (let i = 0; i < map.length; i++) {
-
-        for (let j = 0; j < map[i].length; j++) {
-            x += xsize;
-
-            const tile = new Tile(x, y, map[i][j]);
-
-            tiles.push(tile);
-        }
-        x = 0;
-        y += ysize;
-    }
-
-}
+const mapManager = new MapManager(canvas.width, canvas.height);
 
 function draw() {
-
-    drawBackground();
+    context.drawImage(mapManager.getTileCanvas(), 0, 0);
 
     requestAnimationFrame(draw);
 }
 
-function drawBackground() {
-
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    const xMin = 30;
-    const xMid = 70;
-    const xMax = 100;
-    const yMin = 20;
-    const yMid = 40;
-    const yMax = 60;
-
-
-    for (const tile of tiles) {
-        if (tile.type === 0) {
-            continue;
-        }
-        
-        context.beginPath();
-        context.fillStyle = '#fff';
-        context.strokeStyle = '#8e8e8e';
-        context.moveTo(tile.x + xMin, tile.y);
-        context.lineTo(tile.x, tile.y + yMid);
-        context.lineTo(tile.x + xMid, tile.y + yMid);
-        context.lineTo(tile.x + xMax, tile.y);
-        context.stroke();
-        context.fill();
-        context.closePath();
-        
-        context.beginPath();
-        context.fillStyle = '#807f7e';
-        context.strokeStyle = '#666';
-        context.moveTo(tile.x + xMax, tile.y);
-        context.lineTo(tile.x + xMax, tile.y + yMin)
-        context.lineTo(tile.x + xMid, tile.y + yMax);
-        context.lineTo(tile.x + xMid, tile.y + yMid);
-        context.stroke();
-        context.fill();
-        context.closePath();
-
-        context.beginPath();
-        context.fillStyle = '#959492';
-        context.strokeStyle = '#6c6b6a';
-        context.moveTo(tile.x + xMid, tile.y + yMid);
-        context.lineTo(tile.x + xMid, tile.y + yMax);
-        context.lineTo(tile.x, tile.y + yMax);
-        context.lineTo(tile.x, tile.y + yMid);
-        context.stroke();
-        context.fill();
-        context.closePath();
-    }
-}
-
 function init() {
-
-    buildMap();
+    mapManager.buildMap();
 
     draw();
 }
-
 
 init();
