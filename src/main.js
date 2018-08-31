@@ -55,11 +55,11 @@ class MapManager {
     }
 
     init() {
-        let x = 0;
-        let y = 0;
         let xOffset = -31;
         let xsize = 71;
         let ysize = 41;
+        let x = 131;
+        let y = 100;
 
         for (let i = 0; i < map.length; i++) {
             for (let j = 0; j < map[i].length; j++) {
@@ -76,7 +76,9 @@ class MapManager {
                 }
             }
 
-            x = xOffset;
+            x = 100;
+            x = 100 + xOffset *i;
+
             y += ysize;
 
             if (i > maxYIndex) {
@@ -153,8 +155,9 @@ const character = new Character();
 
 const map = [
     [1, 1, 1, 1],
-    [0, 1, 1, 1, 1],
-    [0, 0, 1, 1, 1]
+    [1, 1, 0, 1],
+    [1, 1, 0, 1],
+    [1, 1, 1, 1]
 ];
 
 let xIndex = 0;
